@@ -38,11 +38,12 @@ require 'states/CountdownState'
 require 'states/PlayState'
 require 'states/ScoreState'
 require 'states/TitleScreenState'
-require 'states/PauseState'
+
 
 require 'Bird'
 require 'Pipe'
 require 'PipePair'
+
 
 -- physical screen dimensions
 WINDOW_WIDTH = 1280
@@ -62,6 +63,8 @@ local BACKGROUND_SCROLL_SPEED = 45
 local GROUND_SCROLL_SPEED = 90
 
 local BACKGROUND_LOOPING_POINT = 413
+
+scrolling = true
 
 function love.load()
     -- initialize our nearest-neighbor filter
@@ -157,8 +160,10 @@ end
 
 function love.update(dt)
     -- scroll our background and ground, looping back to 0 after a certain amount
-    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
-    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
+    if scrolling == true then
+        backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
+        groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
+    end
 
     gStateMachine:update(dt)
 
