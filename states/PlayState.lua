@@ -107,11 +107,13 @@ function PlayState:update(dt)
             self.pause = true
             scrolling = false
             self.bird.y = self.bird.y;
+            sounds['pause']:play()
         end
     else
         if love.keyboard.wasPressed('p') then
             self.pause = false
             scrolling = true
+            sounds['pause']:play()
         end
     end
 
@@ -124,16 +126,21 @@ end
 
 function PlayState:render()
     if self.pause == true then
+        --render birds and pipes in last state
+        for k, pair in pairs(self.pipePairs) do
+            pair:render()
+         end
+        self.bird:render()
+        love.graphics.setFont(flappyFont)
+        love.graphics.print('Score: ' .. tostring(self.score), 8, 8)
+
+        --render pause menu
         love.graphics.setFont(flappyFont)
         love.graphics.print('Paused...', VIRTUAL_WIDTH - 140, 8)
     
         love.graphics.setFont(mediumFont)
         love.graphics.print('Press P to resume', VIRTUAL_WIDTH - 140, 40)
-        for k, pair in pairs(self.pipePairs) do
-            pair:render()
-         end
-        self.bird:render()
-        love.graphics.print('Score: ' .. tostring(self.score), 8, 8)
+        
     else
         for k, pair in pairs(self.pipePairs) do
             pair:render()
